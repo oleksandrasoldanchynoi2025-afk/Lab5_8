@@ -5,10 +5,10 @@ import java.io.Serializable;
 public class Composition implements Serializable, Comparable<Composition> {
     private String title;
     private String artist;
-    private String style;
+    private Style style;
     private double duration;
 
-    public Composition(String title, String artist, String style, double duration) {
+    public Composition(String title, String artist, Style style, double duration) {
         this.title = title;
         this.artist = artist;
         this.style = style;
@@ -17,9 +17,9 @@ public class Composition implements Serializable, Comparable<Composition> {
 
     // Геттери треба для сортування та пошуку
     public String getArtist() { return artist; }
-    public String getStyle() { return style; }
+    public Style getStyle() { return style; }
     public double getDuration() { return duration; }
-
+    public String getTitle() { return title; }
     @Override
     public String toString() {
         // Красивий вивід у рядок

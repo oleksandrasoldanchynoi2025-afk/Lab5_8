@@ -53,30 +53,56 @@ public class Disk {
             System.out.println("-> Активний диск: " + currentDiskName);
         }
     }
-
+//    ----------------------------------------------------------
     // --- ДОДАВАННЯ ПІСНІ ---
+//    public void addComposition() {
+//        System.out.println("\n-> Додавання на " + currentDiskName);
+//
+//        System.out.print("Назва: "); String title = scanner.next();
+//        System.out.print("Виконавець: "); String artist = scanner.next();
+//        System.out.print("Стиль: "); String style = scanner.next();
+//        System.out.print("Час: "); double duration = scanner.nextDouble();
+//
+//        Composition song = new Composition(title, artist, style, duration);
+//
+//
+//        getCurrentPlaylist().add(song);
+//
+//
+//        if (!currentDiskName.equals("All") && cdChanger.containsKey("All")) {
+//            cdChanger.get("All").add(song);
+//        }
+//
+//        System.out.println("Збережено.");
+//        saveToFile();
+//    }
+
+
     public void addComposition() {
         System.out.println("\n-> Додавання на " + currentDiskName);
+        System.out.print("Назва: ");
+        String title = scanner.next();
+        System.out.print("Виконавець: ");
+        String artist = scanner.next();
+        System.out.print("Стиль (Pop, Rock, Jazz): ");
+        String styleInput = scanner.next();
+        Style style = Style.valueOf(styleInput.toUpperCase());
+        System.out.print("Час: ");
+        double duration = scanner.nextDouble();
+        Composition song = new Composition(title, artist, style, (int) duration);
+        addComposition(song);
+    }
 
-        System.out.print("Назва: "); String title = scanner.next();
-        System.out.print("Виконавець: "); String artist = scanner.next();
-        System.out.print("Стиль: "); String style = scanner.next();
-        System.out.print("Час: "); double duration = scanner.nextDouble();
-
-        Composition song = new Composition(title, artist, style, duration);
-
-
+    // 2. Цей метод — для тестів (і для першого методу теж)
+    public void addComposition(Composition song) {
         getCurrentPlaylist().add(song);
-
 
         if (!currentDiskName.equals("All") && cdChanger.containsKey("All")) {
             cdChanger.get("All").add(song);
         }
-
         System.out.println("Збережено.");
         saveToFile();
     }
-
 
 
     public void showCompositions() {
@@ -85,51 +111,166 @@ public class Disk {
         if (list == null || list.isEmpty()) System.out.println("Пусто.");
         else for (Composition c : list) System.out.println(c);
     }
+//    ----------------------------------------------------------
+//    public void calculateDuration() {
+//        double total = 0;
+//        List<Composition> list = getCurrentPlaylist();
+//        if (list != null) for (Composition c : list) total += c.getDuration();
+//        System.out.println("Тривалість: " + total + " хв.");
+//    }
+
 
     public void calculateDuration() {
+        System.out.println("Тривалість: " + calculateTotalDuration() + " хв.");
+    }
+
+    // LOGIC: Рахує і повертає число (для тесту)
+    public double calculateTotalDuration() {
         double total = 0;
         List<Composition> list = getCurrentPlaylist();
-        if (list != null) for (Composition c : list) total += c.getDuration();
-        System.out.println("Тривалість: " + total + " хв.");
+        if (list != null) {
+            for (Composition c : list) total += c.getDuration();
+        }
+        return total;
     }
+
+//    ----------------------------------------------------------
+
+//    public void sortByStyle() {
+//        System.out.print("Стиль для фільтру: ");
+//        String style = scanner.next();
+//        List<Composition> list = getCurrentPlaylist();
+//        if (list != null) {
+//            for (Composition c : list) {
+//                if (c.getStyle().equalsIgnoreCase(style)) System.out.println(c);
+//            }
+//        }
+//    }
+
+
 
     public void sortByStyle() {
         System.out.print("Стиль для фільтру: ");
         String style = scanner.next();
-        List<Composition> list = getCurrentPlaylist();
-        if (list != null) {
-            for (Composition c : list) {
-                if (c.getStyle().equalsIgnoreCase(style)) System.out.println(c);
-            }
-        }
+
+        List<Composition> result = filterByStyle(style); // Виклик логіки
+
+        for (Composition c : result) System.out.println(c);
     }
 
+    // LOGIC: Шукає і повертає список (для тесту)
+    public List<Composition> filterByStyle(String style) {
+        List<Composition> result = new ArrayList<>();
+        List<Composition> list = getCurrentPlaylist();
+
+        if (list != null) {
+            for (Composition c : list) {
+                if (c.getStyle().name().equalsIgnoreCase(style)) {
+                    result.add(c);
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+
+
+//    public void findByArtist() {
+//        System.out.print("Виконавець: ");
+//        String name = scanner.next();
+//        List<Composition> list = getCurrentPlaylist();
+//        if (list != null) {
+//            for (Composition c : list) {
+//                if (c.getArtist().equalsIgnoreCase(name)) System.out.println(c);
+//            }
+//        }
+//    }
+
+
+
+    // UI
     public void findByArtist() {
         System.out.print("Виконавець: ");
         String name = scanner.next();
-        List<Composition> list = getCurrentPlaylist();
-        if (list != null) {
-            for (Composition c : list) {
-                if (c.getArtist().equalsIgnoreCase(name)) System.out.println(c);
-            }
-        }
+
+        List<Composition> result = filterByArtist(name); // Виклик логіки
+
+        for (Composition c : result) System.out.println(c);
     }
 
+    // LOGIC
+    public List<Composition> filterByArtist(String name) {
+        List<Composition> result = new ArrayList<>();
+        List<Composition> list = getCurrentPlaylist();
+
+        if (list != null) {
+            for (Composition c : list) {
+                if (c.getArtist().equalsIgnoreCase(name)) {
+                    result.add(c);
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+
+//    public void findByDurationRange() {
+//        System.out.print("Від: "); double min = scanner.nextDouble();
+//        System.out.print("До: "); double max = scanner.nextDouble();
+//        List<Composition> list = getCurrentPlaylist();
+//        if (list != null) {
+//            for (Composition c : list) {
+//                if (c.getDuration() >= min && c.getDuration() <= max) System.out.println(c);
+//            }
+//        }
+//    }
+
+
+
+    // UI
     public void findByDurationRange() {
         System.out.print("Від: "); double min = scanner.nextDouble();
         System.out.print("До: "); double max = scanner.nextDouble();
+
+        List<Composition> result = filterByDuration(min, max); // Виклик логіки
+
+        for (Composition c : result) System.out.println(c);
+    }
+
+    // LOGIC
+    public List<Composition> filterByDuration(double min, double max) {
+        List<Composition> result = new ArrayList<>();
         List<Composition> list = getCurrentPlaylist();
+
         if (list != null) {
             for (Composition c : list) {
-                if (c.getDuration() >= min && c.getDuration() <= max) System.out.println(c);
+                if (c.getDuration() >= min && c.getDuration() <= max) {
+                    result.add(c);
+                }
             }
         }
+        return result;
     }
 
 
-    private List<Composition> getCurrentPlaylist() {
+
+
+
+//    private List<Composition> getCurrentPlaylist() {
+//        return cdChanger.get(currentDiskName);
+//    }
+
+    public List<Composition> getCurrentPlaylist() {
         return cdChanger.get(currentDiskName);
     }
+
+
+
+
 
     // файли
     private void saveToFile() {
