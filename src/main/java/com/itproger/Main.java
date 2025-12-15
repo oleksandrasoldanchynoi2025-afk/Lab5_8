@@ -12,7 +12,9 @@ public class Main {
         menu.setCommand(4, new SortByStyleCommand(disk));
         menu.setCommand(5, new FindByArtistCommand(disk));
         menu.setCommand(6, new FindByDurationRangeCommand(disk));
-
+        menu.setCommand(7, new SelectDiskCommand(disk));
+        menu.setCommand(8, new CreateDiskCommand(disk));
+        menu.setCommand(9, new RemoveDiskCommand(disk));
         menu.show();
     }
 }
